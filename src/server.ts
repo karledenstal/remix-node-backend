@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import logger from 'morgan';
 import { connectDB as connect } from './db/connect';
+import userRoutes from "./components/users/user.routes";
+import authRoutes from "./components/users/auth.routes";
 
 dotenv.config();
 
@@ -10,11 +12,15 @@ const port = process.env.PORT || 9000;
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(logger(':method :url :status - :response-time ms - :date'));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.set('port', port);
 
-app.listen(port, async () => {
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+
+app.listen(app.get('port'), async () => {
   await connect();
-  console.log('🚀 Connection successful');
+  console.log('🚀 Connection successful on', app.get('port'));
 });

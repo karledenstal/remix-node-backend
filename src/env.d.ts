@@ -8,6 +8,7 @@ declare global {
       MONGO_AUTH_SOURCE: string;
       MONGO_DB: string;
       PORT?: string;
+      JWT_SECRET: string;
     }
   }
 }
