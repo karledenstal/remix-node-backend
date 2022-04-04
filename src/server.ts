@@ -1,12 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv-safe');
-const logger = require('morgan');
-const connect = require('./db/connect.ts');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import logger from 'morgan';
+import { connectDB as connect } from './db/connect';
 
-dotenv.config({
-  allowEmptyValues: true,
-});
+dotenv.config();
 
 const port = process.env.PORT || 9000;
 
@@ -16,7 +14,7 @@ app.use(logger('dev'));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-app.listen(port, () => {
-  console.log('connected to port', port);
-  connect();
+app.listen(port, async () => {
+  await connect();
+  console.log('🚀 Connection successful');
 });
