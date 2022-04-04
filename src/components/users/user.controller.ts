@@ -18,15 +18,15 @@ export const signup = async (req: Request, res: Response) => {
   const user = await User.create({ email, username, password });
 
   if (user) {
-    const send = {
+    const data = {
       _id: user.id,
       username: user.username,
       email: user.email,
     };
 
     res.status(200).json({
-      ...send,
-      token: jwt.sign(send, `${process.env.JWT_SECRET}`, { expiresIn: '30d' }),
+      ...data,
+      token: generateToken(data),
     });
   }
 };
@@ -66,4 +66,23 @@ export const getUser = async (req: Request, res: Response) => {
   } else {
     res.status(404).json('User not found');
   }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const { username } = req.params;
+  const user = await User.findOne({ username });
+
+  if (user) {
+    await user.delete();
+    res.status(200).json('User deleted');
+  } else {
+    res.status(400).json('User not found');
+  }
+};
+
+export const editUser = async (req: Request, res: Response) => {
+  const { username } = req.params;
+  const body = req.body;
+  const user = await User.findOneAndUpdate({ username }, body, { new: true });
+  res.status(200).json(user);
 };
