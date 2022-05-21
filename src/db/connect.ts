@@ -12,6 +12,7 @@ export const connectDB = async () => {
       pass: process.env.MONGO_PASS,
       dbName: process.env.MONGO_DB,
     });
+    console.log('💾 MongoDB connected')
   } catch (e) {
     console.error(e);
   }
